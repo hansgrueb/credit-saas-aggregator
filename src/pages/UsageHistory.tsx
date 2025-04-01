@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Activity, RecentActivityTable } from "@/components/RecentActivityTable";
 import Header from "@/components/Header";
@@ -6,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Download, Filter } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 const usageHistoryData: Activity[] = [
   {

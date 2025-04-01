@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { AIModel, AIModelCard } from "@/components/AIModelCard";
+import AIModelCard, { AIModel } from "@/components/AIModelCard";
 import Header from "@/components/Header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search } from "lucide-react";
