@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { Activity, RecentActivityTable } from "@/components/RecentActivityTable";
+import RecentActivityTable, { Activity } from "@/components/RecentActivityTable";
 import Header from "@/components/Header";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
