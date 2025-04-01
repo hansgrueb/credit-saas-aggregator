@@ -10,6 +10,7 @@ import Models from "./pages/Models";
 import UsageHistory from "./pages/UsageHistory";
 import AddCredits from "./pages/AddCredits";
 import FinancialPlan from "./pages/FinancialPlan";
+import InvestorPlan from "./pages/InvestorPlan";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/usage-history" element={<UsageHistory />} />
           <Route path="/add-credits" element={<AddCredits />} />
           <Route path="/financial-plan" element={<FinancialPlan />} />
+          <Route path="/investor-plan" element={<InvestorPlan />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
