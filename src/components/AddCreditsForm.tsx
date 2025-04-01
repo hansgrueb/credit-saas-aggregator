@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/components/ui/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 const AddCreditsForm = () => {
   const { toast } = useToast();
@@ -65,7 +65,7 @@ const AddCreditsForm = () => {
                 <div className="text-lg font-medium">${pkg.price}</div>
               </div>
             ))}
-
+            
             <div
               className={`flex items-start p-4 border rounded-lg ${
                 selectedPackage === "custom" ? "border-light-blue bg-light-blue/5" : "border-gray-200"

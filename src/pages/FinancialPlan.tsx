@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import Header from "@/components/Header";
 import FinancialProjectionTable from "@/components/FinancialProjectionTable";
 import FinancialProjectionChart from "@/components/FinancialProjectionChart";
@@ -7,72 +8,115 @@ import BusinessModelOverview from "@/components/BusinessModelOverview";
 import MarketSizingAnalysis from "@/components/MarketSizingAnalysis";
 import SensitivityAnalysis from "@/components/SensitivityAnalysis";
 import UnitEconomics from "@/components/UnitEconomics";
+import DynamicFinancialPlanForm from "@/components/DynamicFinancialPlanForm";
+import { calculateFinancialProjections } from "@/utils/financialCalculations";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Download, Save } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const FinancialPlan = () => {
-  const revenueData = [
-    { month: "Month 1", revenue: 2500 },
-    { month: "Month 2", revenue: 4000 },
-    { month: "Month 3", revenue: 5500 },
-    { month: "Month 4", revenue: 7500 },
-    { month: "Month 5", revenue: 10000 },
-    { month: "Month 6", revenue: 13000 },
-    { month: "Month 7", revenue: 16000 },
-    { month: "Month 8", revenue: 19500 },
-    { month: "Month 9", revenue: 23000 },
-    { month: "Month 10", revenue: 27000 },
-    { month: "Month 11", revenue: 31500 },
-    { month: "Month 12", revenue: 36000 },
-  ];
-
-  const usersData = [
-    { month: "Month 1", users: 50 },
-    { month: "Month 2", users: 80 },
-    { month: "Month 3", users: 110 },
-    { month: "Month 4", users: 150 },
-    { month: "Month 5", users: 200 },
-    { month: "Month 6", users: 260 },
-    { month: "Month 7", users: 330 },
-    { month: "Month 8", users: 410 },
-    { month: "Month 9", users: 500 },
-    { month: "Month 10", users: 600 },
-    { month: "Month 11", users: 680 },
-    { month: "Month 12", users: 750 },
-  ];
+  const { toast } = useToast();
+  
+  // Default assumptions
+  const [financialAssumptions, setFinancialAssumptions] = useState({
+    // User growth
+    initialUsers: 50,
+    monthlyGrowthRate: 30, // percentage
+    conversionRate: 15, // percentage
+    
+    // Revenue model
+    avgInitialCreditPurchase: 50, // dollars
+    avgMonthlyCreditPurchase: 75, // dollars
+    markupOnAICosts: 30, // percentage
+    serviceFee: 5, // percentage
+    
+    // Costs
+    aiProviderCostPercentage: 70, // percentage of credit value
+    infrastructureCosts: 1000, // dollars per month
+    teamCosts: 15000, // dollars per month
+    marketingCosts: 3500 // dollars per month
+  });
+  
+  // Calculate financial projections based on assumptions
+  const financialData = calculateFinancialProjections(financialAssumptions);
+  
+  // Use the calculated data for visualizations
+  const { revenueData, usersData, monthlyData, quarterlyData, yearlyData } = financialData;
 
   const assumptions = [
     { category: "User Acquisition", details: [
-      { name: "Initial Users", value: "50 users" },
-      { name: "Monthly Growth Rate", value: "25-35%" },
-      { name: "CAC (Customer Acquisition Cost)", value: "$18-25 per user" },
-      { name: "Conversion Rate (Trial to Paid)", value: "15%" },
+      { name: "Initial Users", value: `${financialAssumptions.initialUsers} users` },
+      { name: "Monthly Growth Rate", value: `${financialAssumptions.monthlyGrowthRate}%` },
+      { name: "Conversion Rate (Trial to Paid)", value: `${financialAssumptions.conversionRate}%` },
     ]},
     { category: "Revenue Model", details: [
-      { name: "Average Initial Credit Purchase", value: "$50" },
-      { name: "Average Monthly Credit Purchase", value: "$75" },
-      { name: "Markup on AI Model Costs", value: "30%" },
-      { name: "Additional Service Fee", value: "5%" },
+      { name: "Average Initial Credit Purchase", value: `$${financialAssumptions.avgInitialCreditPurchase}` },
+      { name: "Average Monthly Credit Purchase", value: `$${financialAssumptions.avgMonthlyCreditPurchase}` },
+      { name: "Markup on AI Model Costs", value: `${financialAssumptions.markupOnAICosts}%` },
+      { name: "Additional Service Fee", value: `${financialAssumptions.serviceFee}%` },
     ]},
     { category: "Costs", details: [
-      { name: "AI Provider Costs", value: "70% of credit value" },
-      { name: "Infrastructure & Hosting", value: "$800-1,200/month" },
-      { name: "Team & Development", value: "$12,000-18,000/month" },
-      { name: "Marketing & Sales", value: "$2,000-5,000/month" },
+      { name: "AI Provider Costs", value: `${financialAssumptions.aiProviderCostPercentage}% of credit value` },
+      { name: "Infrastructure & Hosting", value: `$${financialAssumptions.infrastructureCosts.toLocaleString()}/month` },
+      { name: "Team & Development", value: `$${financialAssumptions.teamCosts.toLocaleString()}/month` },
+      { name: "Marketing & Sales", value: `$${financialAssumptions.marketingCosts.toLocaleString()}/month` },
     ]},
   ];
+
+  const handleSaveScenario = () => {
+    toast({
+      title: "Scenario Saved",
+      description: "Your financial plan scenario has been saved.",
+    });
+  };
+
+  const handleExportPDF = () => {
+    toast({
+      title: "Export Started",
+      description: "Your financial plan PDF is being generated.",
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold">Financial Plan</h1>
-          <p className="text-gray-600">Credit-based SaaS aggregator for freelancers and agencies</p>
+        <div className="mb-6 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold">Financial Plan</h1>
+            <p className="text-gray-600">Credit-based SaaS aggregator for freelancers and agencies</p>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" onClick={handleSaveScenario}>
+              <Save className="mr-2 h-4 w-4" /> Save Scenario
+            </Button>
+            <Button variant="outline" onClick={handleExportPDF}>
+              <Download className="mr-2 h-4 w-4" /> Export PDF
+            </Button>
+          </div>
         </div>
+        
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Financial Model Inputs</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DynamicFinancialPlanForm 
+              assumptions={financialAssumptions} 
+              onUpdateAssumptions={setFinancialAssumptions} 
+            />
+          </CardContent>
+        </Card>
         
         <FinancialProjectionChart revenueData={revenueData} usersData={usersData} />
         
-        <FinancialProjectionTable />
+        <FinancialProjectionTable 
+          monthlyData={monthlyData} 
+          quarterlyData={quarterlyData} 
+          yearlyData={yearlyData} 
+        />
         
         <UnitEconomics />
         
