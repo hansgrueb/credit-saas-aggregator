@@ -94,8 +94,8 @@ const usageHistoryData: Activity[] = [
 const UsageHistory = () => {
   const [filteredData, setFilteredData] = useState<Activity[]>(usageHistoryData);
   const [dateFilter, setDateFilter] = useState("");
-  const [providerFilter, setProviderFilter] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("");
+  const [providerFilter, setProviderFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   
   const applyFilters = () => {
     let result = [...usageHistoryData];
@@ -104,11 +104,11 @@ const UsageHistory = () => {
       result = result.filter(item => item.date.includes(dateFilter));
     }
     
-    if (providerFilter) {
+    if (providerFilter && providerFilter !== "all") {
       result = result.filter(item => item.modelProvider === providerFilter);
     }
     
-    if (categoryFilter) {
+    if (categoryFilter && categoryFilter !== "all") {
       result = result.filter(item => item.category === categoryFilter);
     }
     
@@ -117,8 +117,8 @@ const UsageHistory = () => {
   
   const resetFilters = () => {
     setDateFilter("");
-    setProviderFilter("");
-    setCategoryFilter("");
+    setProviderFilter("all");
+    setCategoryFilter("all");
     setFilteredData(usageHistoryData);
   };
   
@@ -169,7 +169,7 @@ const UsageHistory = () => {
                   <SelectValue placeholder="All Providers" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Providers</SelectItem>
+                  <SelectItem value="all">All Providers</SelectItem>
                   {providers.map(provider => (
                     <SelectItem key={provider} value={provider}>{provider}</SelectItem>
                   ))}
@@ -184,7 +184,7 @@ const UsageHistory = () => {
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Categories</SelectItem>
+                  <SelectItem value="all">All Categories</SelectItem>
                   {categories.map(category => (
                     <SelectItem key={category} value={category}>{category}</SelectItem>
                   ))}
