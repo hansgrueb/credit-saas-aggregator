@@ -3,8 +3,27 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, BarChart3, CreditCard, Layers, Shield } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import FinancialProjectionTable from "@/components/FinancialProjectionTable";
+import { calculateFinancialProjections } from "@/utils/financialCalculations";
 
 const Index = () => {
+  // Use the financial calculation utility with default assumptions
+  const financialData = calculateFinancialProjections({
+    initialUsers: 50,
+    monthlyGrowthRate: 30,
+    conversionRate: 15,
+    avgInitialCreditPurchase: 50,
+    avgMonthlyCreditPurchase: 75,
+    markupOnAICosts: 30,
+    serviceFee: 5,
+    aiProviderCostPercentage: 70,
+    infrastructureCosts: 1000,
+    teamCosts: 15000,
+    marketingCosts: 3500
+  });
+
+  // Extract the data we need for the table component
+  const { monthlyData, quarterlyData, yearlyData } = financialData;
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -78,7 +97,11 @@ const Index = () => {
             Our detailed financial projections show the growth path from the initial freelancer target market to larger agency clients.
           </p>
           
-          <FinancialProjectionTable />
+          <FinancialProjectionTable 
+            monthlyData={monthlyData}
+            quarterlyData={quarterlyData}
+            yearlyData={yearlyData}
+          />
         </div>
       </section>
 
